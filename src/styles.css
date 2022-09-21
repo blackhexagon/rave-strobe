@@ -1,0 +1,17 @@
+* {
+    margin: 0;
+    padding: 0;
+    font: inherit;
+}
+
+body {
+    font-family: sans-serif;
+}
+
+/*body.low {*/
+/*    background: blue;*/
+/*}*/
+
+body.hi {
+    background: greenyellow;
+}

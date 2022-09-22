@@ -13,8 +13,8 @@
   "devDependencies": {
     "parcel": "^2.7.0"
   },
-  "browserslist": "> 0.5%, last 2 versions, not dead",
   "dependencies": {
-    "audiomotion-analyzer": "^3.6.0"
+    "audiomotion-analyzer": "^3.6.0",
+    "lodash.throttle": "^4.1.1"
   }
 }

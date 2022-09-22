@@ -6,16 +6,72 @@
 
 body {
     font-family: sans-serif;
+    --color-primary: rgb(0, 255, 0);
 }
 
 body {
     --opacity: 1;
-    background: rgb(0, 255, 0);
+    background: var(--color-primary);
     height: 100vh;
+    accent-color: var(--color-primary);
+}
+
+img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: absolute;
+    left: 0;
+    top: 0;
+    mix-blend-mode: overlay;
 }
 
 #container {
     position: absolute;
     inset: 0;
     background: rgb(0, 0, 0, var(--opacity));;
+    display: grid;
+    place-items: center;
+}
+
+.toggle {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    z-index: 1;
+}
+
+.toolbar {
+    padding: 0.5rem 1rem;
+    border: 0;
+    background: rgba(255, 255, 255, 1);
+}
+
+.toolbar form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 2rem;
+}
+
+.toolbar label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.toolbar label span {
+    display: block;
+    font-weight: bold;
+}
+
+.toolbar output {
+    font-size: 0.8rem;
+    line-height: 1;
+}
+
+.toolbar select,
+.toolbar input,
+.toolbar button {
+    padding: 0.25rem 0.5rem;
 }

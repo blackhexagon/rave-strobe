@@ -1,13 +1,17 @@
 import AudioMotionAnalyzer from "audiomotion-analyzer"
 
+const container = document.getElementById("container")
+const amplifier = 10 // todo: user input
+const energyPreset = "treble" // todo: user input
+
 async function start(): Promise<AudioMotionAnalyzer> {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     const analyzer = new AudioMotionAnalyzer(null, {
         useCanvas: false,
         connectSpeakers: false,
         onCanvasDraw(instance) {
-            const bassEnergy = instance.getEnergy("bass")
-            console.log(bassEnergy)
+            const energy = instance.getEnergy(energyPreset) * amplifier
+            container.style.setProperty("--opacity", `${energy}`)
         }
     })
     const micStream = analyzer.audioCtx.createMediaStreamSource( stream );

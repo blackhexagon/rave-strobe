@@ -5,14 +5,12 @@
 }
 
 body {
-    font-family: sans-serif;
-    --color-primary: rgb(0, 255, 0);
-}
-
-body {
     --opacity: 1;
+    --color-primary: rgb(0, 255, 0);
+    font-family: sans-serif;
     background: var(--color-primary);
     height: 100vh;
+    overflow: hidden;
     accent-color: var(--color-primary);
 }
 
@@ -34,11 +32,22 @@ img {
     place-items: center;
 }
 
-.toggle {
+.fullscreen-toggle {
     position: absolute;
     inset: 0;
     opacity: 0;
     z-index: 1;
+}
+
+.dialog-toggle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 50px;
+    opacity: 0;
+    z-index: 2;
+    cursor: pointer;
 }
 
 .toolbar {
@@ -58,6 +67,7 @@ img {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    min-width: 200px;
 }
 
 .toolbar label span {

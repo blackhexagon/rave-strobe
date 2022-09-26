@@ -20,6 +20,7 @@ let settings = {
 const images = [...document.querySelectorAll("link[rel=preload][as=image]")].map((link: HTMLLinkElement) => link.href)
 const container = document.getElementById("container")
 const form = document.getElementById("settings")
+const fullscreen = document.getElementById("fullscreen")
 const dialog = form.parentNode
 const image = document.createElement("img")
 container.appendChild(image)
@@ -89,3 +90,11 @@ dialog.addEventListener("click", (e) => {
         element.close()
     }
 })
+
+fullscreen.addEventListener("click", () => {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+    } else if (document.exitFullscreen) {
+        document.exitFullscreen();
+    }
+});

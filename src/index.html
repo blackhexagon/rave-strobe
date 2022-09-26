@@ -7,6 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Rave Strobe</title>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="manifest" href="manifest.json">
+    <link rel="shortcut icon" href="icon.svg" type="image/svg">
     <link rel="preload" href="images/1.svg" as="image">
     <link rel="preload" href="images/2.svg" as="image">
     <link rel="preload" href="images/3.svg" as="image">
@@ -28,7 +30,8 @@
     <script type="module" src="app.ts"></script>
 </head>
 <body>
-    <button class="toggle" onclick="this.nextElementSibling.open ? this.nextElementSibling.close() : this.nextElementSibling.showModal()">open</button>
+    <button class="fullscreen-toggle" id="fullscreen">fullscreen</button>
+    <button class="dialog-toggle" onclick="this.nextElementSibling.open ? this.nextElementSibling.close() : this.nextElementSibling.showModal()">open</button>
     <dialog class="toolbar">
         <form method="dialog" id="settings">
             <label>

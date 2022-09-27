@@ -14,9 +14,11 @@ let settings = {
     lowerFreq: presetData.treble[0],
     upperFreq: presetData.treble[1],
     amplifier: presetData.treble[2],
-    tickThreshold: presetData.treble[3]
+    tickThreshold: presetData.treble[3],
+    bpm: 120
 }
 
+const secondsInMinute = 60 * 1000
 const images = [...document.querySelectorAll("link[rel=preload][as=image]")].map((link: HTMLLinkElement) => link.href)
 const container = document.getElementById("container")
 const form = document.getElementById("settings")
@@ -24,10 +26,10 @@ const dialog = form.parentNode
 const image = document.createElement("img")
 container.appendChild(image)
 
-const updateImage = throttle(() => {
+const createImageUpdater = (bpm: number) => throttle(() => {
     const nextIndex = images.indexOf(image.src) + 1
     image.src = images[nextIndex] || images[0]
-}, 60000 / 130)
+}, secondsInMinute / bpm)
 
 const updateForm = () => {
     Object.entries(settings).map(([name, value]) => {
@@ -38,6 +40,8 @@ const updateForm = () => {
         }
     })
 }
+
+let updateImage = createImageUpdater(settings.bpm)
 
 async function start(): Promise<AudioMotionAnalyzer> {
     const stream = await navigator.mediaDevices.getUserMedia({audio: true});
@@ -68,17 +72,21 @@ form.addEventListener("change", (e) => {
     const input = e.target as HTMLInputElement
     if (input.name === "preset" && input.value) {
         settings = {
+            ...settings,
             preset: input.value,
             lowerFreq: presetData[input.value][0],
             upperFreq: presetData[input.value][1],
             amplifier: presetData[input.value][2],
-            tickThreshold: presetData[input.value][3]
+            tickThreshold: presetData[input.value][3],
         }
     } else {
         settings = {
             ...settings,
             [input.name]: input.value
         }
+    }
+    if (input.name === "bpm" && input.valueAsNumber) {
+        updateImage = createImageUpdater(input.valueAsNumber)
     }
     updateForm()
 })

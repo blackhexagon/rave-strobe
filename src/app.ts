@@ -1,4 +1,5 @@
 import AudioMotionAnalyzer from "audiomotion-analyzer"
+import { RealTimeBPMAnalyzer } from "realtime-bpm-analyzer";
 import throttle from "lodash.throttle"
 
 const presetData = {
@@ -32,6 +33,18 @@ const createImageUpdater = (bpm: number) => throttle(() => {
     image.src = images[nextIndex] || images[0]
 }, secondsInMinute / bpm)
 
+const bpmAnalyzer = new RealTimeBPMAnalyzer({
+    scriptNode: {
+        bufferSize: 4096,
+        numberOfInputChannels: 1,
+        numberOfOutputChannels: 1
+    },
+    pushTime: 2000,
+    pushCallback: function (err, bpm) {
+        console.log('bpm', bpm);
+    }
+});
+
 const updateForm = () => {
     Object.entries(settings).map(([name, value]) => {
         const input = document.querySelector(`[name="${name}"]`) as HTMLInputElement
@@ -44,10 +57,12 @@ const updateForm = () => {
 
 let updateImage = createImageUpdater(settings.bpm)
 
-async function start(): Promise<AudioMotionAnalyzer> {
+async function start(): Promise<[AudioMotionAnalyzer, MediaStreamAudioSourceNode]> {
     const stream = await navigator.mediaDevices.getUserMedia({audio: true});
     const analyzer = new AudioMotionAnalyzer(null, {
-        useCanvas: false, connectSpeakers: false, onCanvasDraw(instance) {
+        useCanvas: false,
+        connectSpeakers: false,
+        onCanvasDraw(instance) {
             const amplifiedEnergy = instance.getEnergy(settings.lowerFreq, settings.upperFreq) * settings.amplifier
             const energy = amplifiedEnergy > 1 ? 1 : amplifiedEnergy
             container.style.setProperty("--opacity", `${energy}`)
@@ -58,13 +73,24 @@ async function start(): Promise<AudioMotionAnalyzer> {
     analyzer.connectInput(micStream);
     // mute output to prevent feedback loops from the speakers
     analyzer.volume = 0;
-    return analyzer
+    return [analyzer, micStream]
+}
+
+const initBpmAnalyzer = ([{audioCtx}, mediaStream]: [AudioMotionAnalyzer, MediaStreamAudioSourceNode]) => {
+    const scriptProcessorNode = audioCtx.createScriptProcessor(4096, 1, 1);
+    scriptProcessorNode.connect(audioCtx.destination);
+    mediaStream.connect(scriptProcessorNode);
+    mediaStream.connect(audioCtx.destination);
+    scriptProcessorNode.onaudioprocess = (e) => {
+        bpmAnalyzer.analyze(e);
+    };
 }
 
 // run
 updateForm()
 start()
-    .then(() => console.log("rave strobe is running"))
+    .then(initBpmAnalyzer)
+    .then()
     .catch((e) => console.error(e))
 
 

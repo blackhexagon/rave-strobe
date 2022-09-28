@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "audiomotion-analyzer": "^3.6.0",
-    "lodash.throttle": "^4.1.1"
+    "lodash.throttle": "^4.1.1",
+    "realtime-bpm-analyzer": "^2.1.6"
   }
 }

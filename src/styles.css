@@ -24,7 +24,7 @@ img {
     mix-blend-mode: overlay;
 }
 
-#container {
+#strobe {
     position: absolute;
     inset: 0;
     background: rgb(0, 0, 0, var(--opacity));;

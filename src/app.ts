@@ -4,17 +4,25 @@ import {presetData, defaultSettings} from "./config";
 
 let settings = {...defaultSettings}
 const secondsInMinute = 60 * 1000
-const images = [...document.querySelectorAll("link[rel=preload][as=image]")].map((link: HTMLLinkElement) => link.href)
+const mouthSources = [...document.querySelectorAll("link[rel=preload][href*='svg']")].map((link: HTMLLinkElement) => link.href)
+const smileySource = document.querySelector<HTMLLinkElement>("link[rel=preload][href*='png']").href
 const strobeContainer = document.getElementById("strobe")
 const form = document.getElementById("settings")
 const fullscreenButton = document.getElementById("fullscreen")
 const dialog = form.parentNode
-const image = document.createElement("img")
-strobeContainer.appendChild(image)
+const mouthImage = document.createElement("img")
+const smileyImage = document.createElement("img")
+smileyImage.src = smileySource
+const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+const context = canvas.getContext("2d");
+const video = document.getElementById('video') as HTMLVideoElement;
+video.volume = 0.001 // cannot be muted because FaceDetector will not work
+const faceDetector = new FaceDetector({fastMode: true})
+strobeContainer.appendChild(mouthImage)
 
 const createImageUpdater = (bpm: number) => throttle(() => {
-    const nextIndex = images.indexOf(image.src) + 1
-    image.src = images[nextIndex] || images[0]
+    const nextIndex = mouthSources.indexOf(mouthImage.src) + 1
+    mouthImage.src = mouthSources[nextIndex] || mouthSources[0]
 }, secondsInMinute / bpm)
 
 const updateForm = () => {
@@ -49,25 +57,51 @@ async function startStrobe(stream: MediaStream): Promise<AudioMotionAnalyzer> {
     return analyzer
 }
 
-async function startFaceDetector(stream: MediaStream) {
-    const canvas: HTMLCanvasElement = document.getElementById('video');
-    const context = canvas.getContext('2d');
-    const faceDetector = new FaceDetector({ fastMode: true });
-    const video = document.createElement('video');
-    video.srcObject = stream;
-    video.autoplay = true;
-    video.onloadedmetadata = () => {
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-    };
-}
 
 // run
 updateForm()
 getMediaStream()
-    .then(stream => startStrobe(stream).then(() => startFaceDetector(stream)))
+    .then(stream => startStrobe(stream)
+        .then(() => {
+            video.srcObject = stream;
+            video.onloadedmetadata = () => {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                renderLoop()
+            }
+        }))
     .then(() => console.log("rave strobe is running"))
     .catch((e) => console.error(e))
+
+
+function renderLoop() {
+    requestAnimationFrame(renderLoop);
+    render()
+}
+
+async function render() {
+    try {
+        const faces = await faceDetector.detect(video)
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+        context.strokeStyle = '#FFFF00';
+        context.lineWidth = 5;
+        faces.forEach((face) => {
+            const { top, left, width, height } = face.boundingBox
+            context.drawImage(smileyImage, left - width / 2, top - height / 2, width * 2, height * 2)
+            // context.beginPath();
+            // context.rect(left, top, width, height);
+            // context.stroke();
+        })
+        if (faces.length > 0) {
+            document.body.classList.add("with-faces")
+        } else {
+            throw new Error("Faces not detected")
+        }
+    } catch (e) {
+        document.body.classList.remove("with-faces")
+    }
+}
 
 
 // event listeners
@@ -84,8 +118,7 @@ form.addEventListener("change", (e) => {
         }
     } else {
         settings = {
-            ...settings,
-            [input.name]: input.value
+            ...settings, [input.name]: input.value
         }
     }
     if (input.name === "bpm" && input.valueAsNumber) {

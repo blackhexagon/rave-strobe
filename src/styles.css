@@ -24,6 +24,10 @@ img {
     mix-blend-mode: overlay;
 }
 
+.with-faces img {
+    opacity: 0;
+}
+
 #strobe {
     position: absolute;
     inset: 0;
@@ -86,4 +90,21 @@ img {
 .toolbar input,
 .toolbar button {
     padding: 0.25rem 0.5rem;
+}
+
+#canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    object-position: center;
+    mix-blend-mode: multiply;
+    opacity: 0;
+    transition: opacity 500ms;
+}
+
+.with-faces #canvas {
+    opacity: 1;
 }

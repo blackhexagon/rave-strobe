@@ -1,6 +1,8 @@
 import AudioMotionAnalyzer from "audiomotion-analyzer"
 import throttle from "lodash.throttle"
 import {presetData, defaultSettings} from "./config";
+import * as faceapi from "face-api.js";
+import {FaceDetection} from "face-api.js";
 
 let settings = {...defaultSettings}
 const secondsInMinute = 60 * 1000
@@ -17,8 +19,14 @@ const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const context = canvas.getContext("2d");
 const video = document.getElementById('video') as HTMLVideoElement;
 video.volume = 0.001 // cannot be muted because FaceDetector will not work
-const faceDetector = new FaceDetector({fastMode: true})
+// const faceDetector = new FaceDetector({fastMode: true})
 strobeContainer.appendChild(mouthImage)
+
+const initFaceApi = async () => {
+    await faceapi.loadFaceLandmarkModel("/model");
+    await faceapi.nets.tinyFaceDetector.loadFromUri("/model");
+};
+
 
 const createImageUpdater = (bpm: number) => throttle(() => {
     const nextIndex = mouthSources.indexOf(mouthImage.src) + 1
@@ -60,7 +68,8 @@ async function startStrobe(stream: MediaStream): Promise<AudioMotionAnalyzer> {
 
 // run
 updateForm()
-getMediaStream()
+initFaceApi()
+    .then(getMediaStream)
     .then(stream => startStrobe(stream)
         .then(() => {
             video.srcObject = stream;
@@ -81,17 +90,13 @@ function renderLoop() {
 
 async function render() {
     try {
-        const faces = await faceDetector.detect(video)
+        const faces = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+        console.log(faces)
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-        context.strokeStyle = '#FFFF00';
-        context.lineWidth = 5;
         faces.forEach((face) => {
-            const { top, left, width, height } = face.boundingBox
+            const { top, left, width, height } = face.box
             context.drawImage(smileyImage, left - width / 2, top - height / 2, width * 2, height * 2)
-            // context.beginPath();
-            // context.rect(left, top, width, height);
-            // context.stroke();
         })
         if (faces.length > 0) {
             document.body.classList.add("with-faces")

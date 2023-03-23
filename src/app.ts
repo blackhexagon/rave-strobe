@@ -5,7 +5,7 @@ import {presetData, defaultSettings} from "./config";
 let settings = {...defaultSettings}
 const secondsInMinute = 60 * 1000
 const mouthSources = [...document.querySelectorAll("link[rel=preload][href*='svg']")].map((link: HTMLLinkElement) => link.href)
-const smileySource = document.querySelector<HTMLLinkElement>("link[rel=preload][href*='png']").href
+const smileySource = document.querySelector<HTMLLinkElement>("link[rel=preload][href*='beta']").href
 const strobeContainer = document.getElementById("strobe")
 const form = document.getElementById("settings")
 const fullscreenButton = document.getElementById("fullscreen")
@@ -84,14 +84,15 @@ async function render() {
         const faces = await faceDetector.detect(video)
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-        context.strokeStyle = '#FFFF00';
-        context.lineWidth = 5;
+        context.fillStyle = 'rgba(0, 255, 0, 0.9)';
         faces.forEach((face) => {
             const { top, left, width, height } = face.boundingBox
-            context.drawImage(smileyImage, left - width / 2, top - height / 2, width * 2, height * 2)
-            // context.beginPath();
-            // context.rect(left, top, width, height);
-            // context.stroke();
+            const multiplier = 1.6
+            context.beginPath();
+            context.arc(left + width / 2, top + width / 2, width, 0, 2 * Math.PI);
+            context.fill()
+            const [imageWidth, imageHeight] = [width * multiplier, height * multiplier]
+            context.drawImage(smileyImage, left - ((imageWidth - width) / 2), top - ((imageHeight - height) / 3), imageWidth, imageHeight)
         })
         if (faces.length > 0) {
             document.body.classList.add("with-faces")

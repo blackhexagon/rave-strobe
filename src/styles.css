@@ -103,8 +103,10 @@ img {
     mix-blend-mode: multiply;
     opacity: 0;
     transition: opacity 500ms;
+    transition-delay: 1000ms;
 }
 
 .with-faces #canvas {
     opacity: 1;
+    transition-delay: 100ms;
 }

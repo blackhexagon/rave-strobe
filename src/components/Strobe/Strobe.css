@@ -1,0 +1,13 @@
+@keyframes strobe {
+    0% { opacity: 0 }
+    100% { opacity: 100% }
+}
+
+.strobe {
+    position: absolute;
+    inset: 0;
+    opacity: calc(1 - var(--energy, 1));
+    background: var(--color, rgb(0 ,255, 0));
+    mix-blend-mode: difference;
+    animation: var(--frequency, 0ms) steps(2, jump-end) infinite strobe;
+}

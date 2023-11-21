@@ -16,7 +16,7 @@ function App({ stream }: Props) {
   const [settings, dispatch] = useSettings();
   const [toolbarOpen, setToolbarOpen] = useState(false);
   const [energy, setEnergy] = useState(0.5);
-  const [photo, setPhoto] = useState<string | null>(null);
+  const [photos, setPhotos] = useState<Array<[number, string]>>([]);
 
   useEffect(() => {
     async function init() {
@@ -41,8 +41,15 @@ function App({ stream }: Props) {
   }, [stream, settings.amplifier, settings.lowerFreq, settings.upperFreq]);
 
   useEffect(() => {
-    // to be updated by the wss
-    setPhoto("/sample.jpg");
+    const socket = new WebSocket("ws://localhost:3000");
+
+    socket.addEventListener("message", function (event) {
+      const data = JSON.parse(event.data);
+      setPhotos((prev) => [
+        ...prev,
+        [Date.now(), `http://localhost:3000/photo/${data.photo}`],
+      ]);
+    });
   }, []);
 
   const handleToggleToolbar = () => setToolbarOpen((prev) => !prev);
@@ -50,15 +57,12 @@ function App({ stream }: Props) {
   return (
     <>
       <Toggle onClick={handleToggleToolbar} />
-      {photo ? (
-        <Audience src={photo} />
-      ) : (
-        <Cartoon
-          energy={energy}
-          tickThreshold={settings.tickThreshold}
-          color={settings.color}
-        />
-      )}
+      <Audience photos={photos} />
+      <Cartoon
+        energy={energy}
+        tickThreshold={settings.tickThreshold}
+        color={settings.color}
+      />
       <Strobe
         energy={energy}
         color={settings.color}

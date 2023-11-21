@@ -8,3 +8,7 @@
     pointer-events: none;
     filter: url(#recolor);
 }
+
+.audience ~ .cartoon {
+    display: none;
+}

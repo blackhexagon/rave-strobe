@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Show your face on Sousto TV</title>
+    <style>
+        body {
+            background: #00ff00;
+            height: 100vh;
+        }
+        form {
+            display: contents;
+        }
+        input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            inset: 0;
+        }
+    </style>
+</head>
+<body>
+<form name="default">
+    <input id="photo" type="file" accept="image/*" capture="user" name="photo" required>
+</form>
+<script>
+    document.forms.default.addEventListener("change", async (e) => {
+        e.preventDefault()
+        const formData = new FormData(document.forms.default)
+        try {
+            await fetch("http://localhost:3000/upload", {
+                method: "POST",
+                body: formData
+            })
+            document.forms.default.reset()
+            alert("Your face is broadcast!")
+        } catch {
+            alert("Fuck. Something went wrong.")
+        }
+    })
+</script>
+</body>
+</html>

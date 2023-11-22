@@ -6,22 +6,25 @@ interface Props {
 }
 
 const Audience = ({ photos }: Props) => {
-  const [currentTime, setCurrentTime] = useState(Date.now());
+  const [src, setSrc] = useState<string|null>(null)
 
   useEffect(() => {
-    // Set up the interval
     const timerId = setInterval(() => {
-      // Update the current time every minute
-      setCurrentTime(Date.now());
-    }, 10000); // Every 10 seconds
+      const newPhotos = photos.filter(([dt]) => dt + 60000 > Date.now());
+      if (newPhotos.length === 0) {
+        setSrc(null)
+      } else if (newPhotos.length === 1) {
+        setSrc(newPhotos[0][1])
+      } else {
+        const [, newSrc] = newPhotos.filter(([, candidateSrc]) => candidateSrc !==src)[Math.floor(Math.random() * newPhotos.length)];
+        setSrc(newSrc)
+      }
+    }, 5000); // Every 5 seconds
     // Clear the interval when the component unmounts
     return () => clearInterval(timerId);
-  }, []);
+  }, [photos]);
 
-  const newPhotos = photos.filter(([dt]) => dt + 60000 > currentTime);
-  const random = newPhotos[Math.floor(Math.random() * newPhotos.length)];
-  if (!random) return null;
-  const [, src] = random;
+  if (!src) return null
   return <img className={"audience"} src={src} alt={"audience"} />;
 };
 

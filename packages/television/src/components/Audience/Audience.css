@@ -6,6 +6,6 @@
     z-index: 5;
     object-fit: cover;
     object-position: center;
-    mix-blend-mode: darken;
+    mix-blend-mode: color-dodge;
     pointer-events: none;
 }

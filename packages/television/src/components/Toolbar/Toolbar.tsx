@@ -96,7 +96,7 @@ const Toolbar = ({ settings, onChange, open }: Props) => {
             type="range"
             step="0.1"
             min="0.1"
-            max="30"
+            max="100"
             onChange={handleNumberInputChange}
           />
           <output>{settings.amplifier}</output>

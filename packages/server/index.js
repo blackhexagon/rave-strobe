@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const cors = require('cors');
+const sharp = require('sharp');
 const { WebSocketServer } = require('ws');
 const http = require('http');
 const fs = require('fs');
@@ -39,8 +40,19 @@ function broadcast(data) {
 }
 
 // Handle image uploads
-app.post('/upload', upload.single('photo'), (req, res) => {
+app.post('/upload', upload.single('photo'), async (req, res) => {
     if (req.file) {
+        const imagePath = req.file.path;
+        const buffer = await sharp(imagePath)
+            .resize({
+                width: 1200,
+                height: 900,
+                fit: sharp.fit.inside,
+            })
+            .jpeg({ quality: 50 })
+            .toBuffer()
+        await sharp(buffer).toFile(imagePath)
+
         // Respond with a JSON object that includes the filename as saved on the server
         broadcast(JSON.stringify({photo: req.file.filename}));
         res.status(200).json({

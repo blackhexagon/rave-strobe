@@ -25,3 +25,10 @@ services:
       - ${PORT_TELEVISION}:${PORT_TELEVISION}
       - ${PORT_SERVER}:${PORT_SERVER}
       - ${PORT_PARTYGOER}:${PORT_PARTYGOER}
+    networks:
+      - proxynet
+
+networks:
+  proxynet:
+    name: proxynet
+    driver: bridge

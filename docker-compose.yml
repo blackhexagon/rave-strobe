@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  rave-strobe:
+    image: node:latest
+    working_dir: /app
+    environment:
+      - PORT_SERVER=${PORT_SERVER}
+      - PORT_TELEVISION=${PORT_TELEVISION}
+      - PORT_PARTYGOER=${PORT_PARTYGOER}
+      - VITE_SERVER_API=${VITE_SERVER_API}
+      - VITE_SERVER_WS=${VITE_SERVER_WS}
+    volumes:
+      - ./:/app
+    command:
+      - /bin/sh
+      - -c
+      - |
+        npm install
+        npm run start --workspace=server &
+        npm run build --workspace=partygoer
+        npm run serve --workspace=partygoer &
+        npm run build --workspace=television
+        npm run serve --workspace=television
+    ports:
+      - ${PORT_TELEVISION}:${PORT_TELEVISION}
+      - ${PORT_SERVER}:${PORT_SERVER}
+      - ${PORT_PARTYGOER}:${PORT_PARTYGOER}

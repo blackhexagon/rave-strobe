@@ -9,7 +9,9 @@ navigator.mediaDevices
     audio: true,
   })
   .then((stream) => {
-    const wss = new WebSocket("ws://localhost:3000")
+    const wss = new WebSocket(
+      import.meta.env.VITE_SERVER_WS || `ws://localhost:3000`,
+    );
     const analyzer = new AudioMotionAnalyzer(undefined, {
       useCanvas: false,
       connectSpeakers: false,

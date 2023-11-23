@@ -85,4 +85,7 @@ app.post("/settings", (req, res) => {
 app.use(express.static("public"));
 
 // Start server
-server.listen(3000, () => console.log(`Listening on http://localhost:3000/`));
+const port = process.env.PORT_SERVER || 3000;
+server.listen(port, () =>
+  console.log(`Listening on http://localhost:${port}/`),
+);

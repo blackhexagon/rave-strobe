@@ -10,7 +10,7 @@ import Audience from "../Audience/Audience.tsx";
 
 interface Props {
   audioAnalyzer: AudioMotionAnalyzer;
-  wss: WebSocket
+  wss: WebSocket;
 }
 
 function App({ audioAnalyzer, wss }: Props) {
@@ -23,23 +23,28 @@ function App({ audioAnalyzer, wss }: Props) {
     audioAnalyzer.setOptions({
       onCanvasDraw(instance) {
         const amplifiedEnergy =
-            instance.getEnergy(settings.lowerFreq, settings.upperFreq) *
-            settings.amplifier;
+          instance.getEnergy(settings.lowerFreq, settings.upperFreq) *
+          settings.amplifier;
         setEnergy(amplifiedEnergy > 1 ? 1 : amplifiedEnergy);
       },
-    })
-  }, [ settings.amplifier, settings.lowerFreq, settings.upperFreq ]);
+    });
+  }, [settings.amplifier, settings.lowerFreq, settings.upperFreq]);
 
   useEffect(() => {
     wss.addEventListener("message", function (event) {
       const data = JSON.parse(event.data);
       if (data.photo) {
-          setPhotos((prev) => [
-              ...prev,
-              [Date.now(), `http://localhost:3000/photo/${data.photo}`],
-          ]);
+        setPhotos((prev) => [
+          ...prev,
+          [
+            Date.now(),
+            `${
+              import.meta.env.VITE_SERVER_API || "http://localhost:3000"
+            }/photo/${data.photo}`,
+          ],
+        ]);
       } else {
-          dispatch(data)
+        dispatch(data);
       }
     });
   }, []);

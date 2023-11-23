@@ -1,3 +1,5 @@
+import "./styles.css";
+
 document.forms.default.addEventListener("change", async (e) => {
   e.preventDefault();
   const formData = new FormData(document.forms.default);

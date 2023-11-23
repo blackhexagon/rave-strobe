@@ -2,29 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Show your face on Sousto TV</title>
-    <style>
-      body {
-        background: #00ff00;
-        height: 100vh;
-      }
-      form {
-        display: contents;
-      }
-      input {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        inset: 0;
-      }
-    </style>
   </head>
   <body>
-    <div id="app"></div>
     <form name="default">
+      <img src="/public/logo.svg" alt="Logo sousto">
+      <h1>Show us your (friends) rave face, and it will instantly broadcast it to our TVs for one minute.</h1>
       <input id="photo" type="file" accept="image/*" capture="user" name="photo" required>
+      <button>
+        Broadcast yourself
+        <img src="/public/icon.svg" alt="icon" />
+      </button>
     </form>
     <script type="module" src="/main.js"></script>
   </body>

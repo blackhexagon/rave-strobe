@@ -52,6 +52,7 @@ app.post("/upload", upload.single("photo"), async (req, res) => {
         fit: sharp.fit.inside,
       })
       .jpeg({ quality: 50 })
+      .withMetadata()
       .toBuffer();
     await sharp(buffer).toFile(imagePath);
 

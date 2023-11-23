@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   rave-strobe:
+    container_name: rave
     image: node:latest
     working_dir: /app
     environment:

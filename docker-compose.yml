@@ -8,6 +8,7 @@ services:
       - PORT_SERVER=${PORT_SERVER}
       - PORT_TELEVISION=${PORT_TELEVISION}
       - PORT_PARTYGOER=${PORT_PARTYGOER}
+      - PORT_REMOTE=${PORT_REMOTE}
       - VITE_SERVER_API=${VITE_SERVER_API}
       - VITE_SERVER_WS=${VITE_SERVER_WS}
     volumes:
@@ -20,12 +21,15 @@ services:
         npm run start --workspace=server &
         npm run build --workspace=partygoer
         npm run serve --workspace=partygoer &
+        npm run build --workspace=remote
+        npm run serve --workspace=remote &
         npm run build --workspace=television
         npm run serve --workspace=television
     ports:
       - ${PORT_TELEVISION}:${PORT_TELEVISION}
       - ${PORT_SERVER}:${PORT_SERVER}
       - ${PORT_PARTYGOER}:${PORT_PARTYGOER}
+      - ${PORT_REMOTE}:${PORT_REMOTE}
     networks:
       - proxynet
 

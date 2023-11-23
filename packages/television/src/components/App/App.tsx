@@ -3,7 +3,10 @@ import Cartoon from "../Cartoon/Cartoon.tsx";
 import { useEffect, useState } from "react";
 import Strobe from "../Strobe/Strobe.tsx";
 import Toolbar from "../Toolbar/Toolbar.tsx";
-import useSettings from "../../hooks/useSettings.ts";
+import useSettings, {
+  Presets,
+  SettingsState,
+} from "../../hooks/useSettings.ts";
 import Toggle from "../Toggle/Toggle.tsx";
 import AudioMotionAnalyzer from "audiomotion-analyzer";
 import Audience from "../Audience/Audience.tsx";
@@ -31,7 +34,7 @@ function App({ audioAnalyzer, wss }: Props) {
   }, [settings.amplifier, settings.lowerFreq, settings.upperFreq]);
 
   useEffect(() => {
-    wss.addEventListener("message", function (event) {
+    const handleEvent = (event: any) => {
       const data = JSON.parse(event.data);
       if (data.photo) {
         setPhotos((prev) => [
@@ -44,9 +47,24 @@ function App({ audioAnalyzer, wss }: Props) {
           ],
         ]);
       } else {
-        dispatch(data);
+        for (const [key, value] of Object.entries(data)) {
+          if (key === "preset") {
+            dispatch({ key, value: value as Presets });
+          } else if (key === "color") {
+            dispatch({ key, value: value as string });
+          } else {
+            dispatch({
+              key: key as keyof SettingsState,
+              value: parseFloat(value as string),
+            });
+          }
+        }
       }
-    });
+    };
+    wss.addEventListener("message", handleEvent);
+    return () => {
+      wss.removeEventListener("message", handleEvent);
+    };
   }, []);
 
   const handleToggleToolbar = () => setToolbarOpen((prev) => !prev);

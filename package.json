@@ -6,7 +6,8 @@
   "scripts": {
     "start:television": "npm run dev --workspace=television",
     "start:server": "npm run start --workspace=server",
-    "start:partygoer": "npm run start --workspace=partygoer",
+    "start:partygoer": "npm run dev --workspace=partygoer",
+    "start:remote": "npm run dev --workspace=remote",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "workspaces": [

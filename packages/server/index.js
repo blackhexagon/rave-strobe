@@ -11,6 +11,8 @@ const server = http.createServer(app);
 
 // Enable All CORS Requests for REST API
 app.use(cors());
+// Add this line to parse JSON bodies
+app.use(express.json());
 
 const uploadsDir = "uploads/";
 
@@ -77,7 +79,7 @@ app.get("/photo/:filename", (req, res) => {
 });
 
 app.post("/settings", (req, res) => {
-  console.log(req.body);
+  broadcast(JSON.stringify(req.body));
   res.status(200).json({ message: "OK" });
 });
 

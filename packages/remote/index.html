@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Remote control</title>
+  </head>
+  <body>
+    <form class="toolbar">
+      <label>
+        <span>preset</span>
+        <select name="preset">
+          <option value="">select</option>
+          <option value="bass">bass</option>
+          <option value="lowMid">lowMid</option>
+          <option value="mid">mid</option>
+          <option value="highMid">highMid</option>
+          <option value="treble">treble</option>
+        </select>
+      </label>
+      <label>
+        <span>lower freq threshold</span>
+        <input
+          name="lowerFreq"
+          type="range"
+          step="1"
+          min="0"
+          max="16000"
+          value="0"
+        />
+        <output>---</output>
+      </label>
+      <label>
+        <span>upper freq threshold</span>
+        <input
+          name="upperFreq"
+          type="range"
+          step="1"
+          min="0"
+          max="16000"
+          value="0"
+        />
+        <output>---</output>
+      </label>
+      <label>
+        <span>BPM</span>
+        <input
+          name="bpm"
+          type="range"
+          step="1"
+          min="70"
+          max="200"
+          value="0"
+        />
+        <output>---</output>
+      </label>
+      <label>
+        <span>amplifier</span>
+        <input
+          name="amplifier"
+          type="range"
+          step="0.1"
+          min="0.1"
+          max="100"
+          value="0"
+        />
+        <output>---</output>
+      </label>
+      <label>
+        <span>image tick threshold</span>
+        <input
+          name="tickThreshold"
+          type="range"
+          step="0.1"
+          min="0.1"
+          value="0.1"
+          max="1"
+        />
+        <output>---</output>
+      </label>
+      <label>
+        <span>color</span>
+        <input
+          name="color"
+          type="color"
+        />
+        <output>---</output>
+      </label>
+      <label>
+        <span>strobe</span>
+        <input
+          name="strobe"
+          type="range"
+          min="0"
+          max="500"
+          value="0"
+        />
+        <output>---</output>
+      </label>
+      <input type="reset" value="reset">
+    </form>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

@@ -10,6 +10,7 @@ import useSettings, {
 import Toggle from "../Toggle/Toggle.tsx";
 import AudioMotionAnalyzer from "audiomotion-analyzer";
 import Audience from "../Audience/Audience.tsx";
+import Text from "../Text/Text.tsx";
 
 interface Props {
   audioAnalyzer: AudioMotionAnalyzer;
@@ -50,6 +51,8 @@ function App({ audioAnalyzer, wss }: Props) {
         for (const [key, value] of Object.entries(data)) {
           if (key === "preset") {
             dispatch({ key, value: value as Presets });
+          } else if (key === "text") {
+            dispatch({ key, value: value as string });
           } else if (key === "color") {
             dispatch({ key, value: value as string });
           } else {
@@ -78,6 +81,7 @@ function App({ audioAnalyzer, wss }: Props) {
         tickThreshold={settings.tickThreshold}
         color={settings.color}
       />
+      <Text text={settings.text} color={settings.color} />
       <Strobe
         energy={energy}
         color={settings.color}

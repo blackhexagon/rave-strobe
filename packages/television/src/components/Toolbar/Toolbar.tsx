@@ -35,6 +35,13 @@ const Toolbar = ({ settings, onChange, open }: Props) => {
     });
   };
 
+  const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => {
+    onChange({
+      key: "text",
+      value: e.currentTarget.value,
+    });
+  };
+
   return (
     <dialog open={open} className={"toolbar"}>
       <form method="dialog">
@@ -135,6 +142,15 @@ const Toolbar = ({ settings, onChange, open }: Props) => {
             onInput={handleNumberInputChange}
           />
           <output>{settings.strobe}</output>
+        </label>
+        <label>
+          <span>text</span>
+          <input
+            name="text"
+            value={settings.text}
+            type="text"
+            onInput={handleTextChange}
+          />
         </label>
       </form>
     </dialog>

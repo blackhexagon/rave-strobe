@@ -16,6 +16,7 @@ export interface SettingsState {
   bpm: number;
   strobe: number;
   color: string;
+  text: string;
 }
 
 export type Presets = keyof typeof presetData;
@@ -31,6 +32,10 @@ export type SettingsAction =
     }
   | {
       key: "color";
+      value: string;
+    }
+  | {
+      key: "text";
       value: string;
     };
 
@@ -61,6 +66,7 @@ const initialState: SettingsState = {
   bpm: 120,
   color: "#00ff00",
   strobe: 0,
+  text: "",
 };
 
 export default function useSettings() {

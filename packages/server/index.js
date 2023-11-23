@@ -53,6 +53,7 @@ app.post("/upload", upload.single("photo"), async (req, res) => {
       })
       .jpeg({ quality: 50 })
       .withMetadata()
+      .rotate()
       .toBuffer();
     await sharp(buffer).toFile(imagePath);
 

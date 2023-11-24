@@ -4,6 +4,7 @@ document.forms.default.addEventListener("change", async (e) => {
   e.preventDefault();
   const formData = new FormData(document.forms.default);
   try {
+    document.body.classList.add("loading");
     await fetch(
       `${import.meta.env.VITE_SERVER_API || "http://localhost:3000"}/upload`,
       {
@@ -12,8 +13,10 @@ document.forms.default.addEventListener("change", async (e) => {
       },
     );
     document.forms.default.reset();
-    alert("Your face is broadcast!");
+    document.body.classList.remove("loading");
+    document.body.classList.add("success");
   } catch {
-    alert("Fuck. Something went wrong.");
+    document.body.classList.remove("loading");
+    document.body.classList.add("error");
   }
 });

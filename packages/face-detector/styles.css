@@ -1,0 +1,32 @@
+
+@font-face {
+    font-family: "Hafer";
+    src: url("./public/haffer.woff2");
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    --color: #00ff00;
+    background: var(--color);
+    height: 100vh;
+    overflow: hidden;
+    font-family: "Hafer", serif;
+    font-variation-settings: "XHGT" 0, "ital" 0, "wght" 1000;
+    font-feature-settings: "dlig" 0, "liga" 0;
+    font-size: 1.5rem;
+}
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    object-position: center;
+    mix-blend-mode: multiply;
+}

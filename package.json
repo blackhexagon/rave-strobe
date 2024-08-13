@@ -8,6 +8,7 @@
     "start:server": "npm run start --workspace=server",
     "start:partygoer": "npm run dev --workspace=partygoer",
     "start:remote": "npm run dev --workspace=remote",
+    "start:face-detector": "npm run dev --workspace=face-detector",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "workspaces": [

@@ -3,7 +3,7 @@ import "./style.css";
 document.querySelectorAll("input, select").forEach((input) => {
   input.addEventListener("change", (event) => {
     fetch(
-      `${import.meta.env.VITE_SERVER_API || "http://localhost:3000"}/settings`,
+      `${import.meta.env.VITE_SERVER_API || `http://${location.hostname}:3000`}/settings`,
       {
         method: "POST",
         headers: {

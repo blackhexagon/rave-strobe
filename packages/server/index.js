@@ -90,6 +90,6 @@ app.use(express.static("public"));
 
 // Start server
 const port = process.env.PORT_SERVER || 3000;
-server.listen(port, () =>
+server.listen(port, "0.0.0.0", () =>
   console.log(`Listening on http://localhost:${port}/`),
 );

@@ -1,0 +1,43 @@
+@font-face {
+  font-family: "Hafer";
+  src: url("./haffer.woff2");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  --color: #00ff00;
+  background: var(--color);
+  height: 100vh;
+  overflow: hidden;
+  font-family: "Hafer", serif;
+  font-variation-settings:
+    "XHGT" 0,
+    "ital" 0,
+    "wght" 1000;
+  font-feature-settings:
+    "dlig" 0,
+    "liga" 0;
+  display: grid;
+}
+
+section {
+  grid-area: 1 / 1 / 2 / 2;
+  font-size: 20rem;
+  line-height: 1;
+  height: 100%;
+  text-align: center;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  opacity: 0;
+  letter-spacing: -0.05em;
+}
+
+.active {
+  opacity: 1;
+}

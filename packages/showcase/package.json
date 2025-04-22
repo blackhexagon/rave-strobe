@@ -1,0 +1,15 @@
+{
+  "name": "showcase",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "serve": "npx serve ./dist -l $PORT_REMOTE",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.3.2"
+  }
+}

@@ -18,4 +18,4 @@ setInterval(() => {
     index = 0;
   }
   update(index);
-}, 1000);
+}, 2000);
